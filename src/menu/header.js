@@ -3,7 +3,12 @@ export default [
   { path: '/index', title: '首页', icon: 'home' },
   {
     path: '/demo',
-    title: '演示页面',
+    title: '工作空间',
+    icon: 'folder-o'
+  },
+ {
+    path: '/deepseek',
+    title: 'deepseek',
     icon: 'folder-o'
   }
 ]
