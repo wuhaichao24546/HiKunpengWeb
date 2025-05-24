@@ -1,14 +1,14 @@
 <template>
   <d2-container class="page">
     <d2-page-cover
-      title="Cloud-Platform"
+      title="鲲鹏"
       sub-title="基于Spring Cloud微服务的中台系统">
       <d2-icon-svg
         class="page__logo"
         name="d2-admin"/>
       <template slot="footer">
         <div class="page__btn-group">
-          <span @click="$open('https://github.com/wxiaoqi/Spring-Cloud-Platform')">Github</span>
+          <span @click="$open('https://github.com/wuhaichao24546/HiKunpeng')">前往我的代码仓</span>
         </div>
       </template>
     </d2-page-cover>

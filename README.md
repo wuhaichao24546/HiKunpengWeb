@@ -1,12 +1,11 @@
 ### 后端工程地址
 ```
-Gitee：https://gitee.com/geek_qi/cloud-platform
-Github：https://github.com/wxiaoqi/Spring-Cloud-Platform
+Github：https://github.com/wuhaichao24546/HiKunpeng
 ```
 ### 运行使用
 
 ```bash
-git clone https://github.com/wxiaoqi/Spring-Cloud-PlatformUI.git
+git clone https://github.com/wuhaichao24546/HiKunpengWeb.git
 
 npm install
 

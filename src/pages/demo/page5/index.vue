@@ -1,29 +1,29 @@
 <template>
   <d2-container>
     <template slot="header">
-        <el-select @change="handleSizeChangeNew" class="filter-item" v-model="form.type" placeholder="请选择类别">
-            <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-          </el-select>
+      <el-input @keyup.enter.native="handleFilter" style="width: 200px;margin-right: 20px;" class="filter-item"
+        placeholder="请输入标题" v-model="listQuery.title" size="small"> </el-input>
+      <el-button class="filter-item" type="primary" icon="search" @click="handleFilter" size="small">搜索</el-button>
     </template>
     <el-table :key='tableKey' :data="list" v-loading.body="listLoading" size="small" stripe highlight-current-row
       style="width: 100%;margin-top: 20px">
-      <el-table-column align="center" label="序号" width="180"> <template slot-scope="scope">
+      <el-table-column align="center" label="序号" width="80"> <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template> </el-table-column>
-      <el-table-column width="200" align="center" label="总数"> <template slot-scope="scope">
-          <span>{{ scope.row.totalNum }}</span>
+      <el-table-column width="150" align="center" label="标题"> <template slot-scope="scope">
+          <span>{{ scope.row.title }}</span>
         </template> </el-table-column>
-      <el-table-column width="200" align="center" label="未完成数"> <template slot-scope="scope">
-          <span>{{ scope.row.doingNum }}</span>
+      <el-table-column width="400" align="center" label="描述"> <template slot-scope="scope">
+          <span>{{ scope.row.description }}</span>
         </template> </el-table-column>
-      <el-table-column width="200" align="center" label="完成率"> <template slot-scope="scope">
-          <span>{{ scope.row.finishRat }}</span>
+      <el-table-column width="300" align="center" label="计划完成时间"> <template slot-scope="scope">
+          <span>{{ scope.row.planEndTime }}</span>
         </template> </el-table-column>
-      <el-table-column width="240" align="center" label="类别"> <template slot-scope="scope">
-          <span>{{getChangeType(scope.row.type)}}</span>
+      <el-table-column width="170" align="center" label="分类"> <template slot-scope="scope">
+          <span>{{ scope.row.className }}</span>
         </template> </el-table-column>
-      <el-table-column width="240" align="center" label="更新时间"> <template slot-scope="scope">
-          <span>{{ scope.row.updateDate }}</span>
+      <el-table-column width="170" align="center" label="状态"> <template slot-scope="scope">
+          <span>{{getChangeType(scope.row.status)}}</span>
         </template> </el-table-column>
     </el-table>
     <!-- <div v-show="!listLoading" class="pagination-container"> -->
@@ -68,16 +68,16 @@ import {
   addObj,
   getObj,
   delObj,
+  pageHis,
   putObj
-} from '@/api/admin/baseTodoReport/index'
+} from '@/api/admin/todo/index'
 import { mapGetters } from 'vuex'
 export default {
-  name: 'page3',
+  name: 'userManager',
   data() {
     return {
 
       form: {
-        type: 'week',
         title: undefined,
         status: 'todo',
         classId: undefined,
@@ -132,9 +132,10 @@ export default {
         name: undefined
       },
       typeList:[
-        {value:'week',label:'最近一周'},
-        {value:'month',label:'最近一月'},
-        {value:'year',label:'最近一年'}
+        {value:'todo',label:'待完成'},
+        {value:'finish',label:'已完成'},
+        {value:true,label:'预期'},
+        {value:false,label:'健康'}
       ],
       sexOptions: ['男', '女'],
       dialogFormVisible: false,
@@ -160,32 +161,25 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      page(this.listQuery)
+      pageHis(this.listQuery)
         .then(response => {
           this.list = response.rows
           this.total = response.total
           this.listLoading = false
         })
     },
-    getChangeType(e) {
-      for (var i = 0; i < this.typeList.length; i++) {
-        if (this.typeList[i].value == e) { //value，label保持和上面定义一致
-          return this.typeList[i].label;
-        }
-      }
-    },
     handleFilter() {
       this.getList()
-    },
-    handleSizeChangeNew(val) {
-      this.listQuery.limit = 20
-      this.listQuery.page = 1
-      this.listQuery.type = val
-      this.getList(this.listQuery)
     },
     handleSizeChange(val) {
       this.listQuery.limit = val
       this.getList()
+    },
+    handleSizeChangeNew(val) {
+      this.listQuery.limit = 1
+      this.listQuery.page = 20
+      this.listQuery.type = val
+      this.getList(listQuery)
     },
     handleCurrentChange(val) {
       this.listQuery.page = val
@@ -223,6 +217,13 @@ export default {
               this.list.splice(index, 1)
             })
         })
+    },
+    getChangeType(e) {
+      for (var i = 0; i < this.typeList.length; i++) {
+        if (this.typeList[i].value == e) { //value，label保持和上面定义一致
+          return this.typeList[i].label;
+        }
+      }
     },
     create(formName) {
       const set = this.$refs
